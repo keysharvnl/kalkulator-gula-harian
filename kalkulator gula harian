@@ -1,0 +1,59 @@
+import streamlit as st
+
+st.set_page_config(page_title="Sugar Intake Calculator", page_icon="🍭", layout="centered")
+
+# Dictionary of some common foods and their sugar content per serving (grams)
+FOODS_SUGAR_CONTENT = {
+    "Apple (1 medium)": 19,
+    "Banana (1 medium)": 14,
+    "Orange (1 medium)": 12,
+    "Bread (1 slice)": 1.5,
+    "Chocolate bar (50g)": 25,
+    "Soft drink (330ml can)": 35,
+    "Yogurt (100g, flavored)": 12,
+    "Ice cream (100g)": 21,
+    "Cookies (1 piece)": 7,
+    "Candy (1 piece)": 5,
+    "Cereal (1 cup)": 9,
+    "Fruit juice (250ml)": 26,
+    "Honey (1 tablespoon)": 17,
+    "Jam (1 tablespoon)": 10,
+    "Cake (1 slice)": 22,
+}
+
+st.title("🍬 Sugar Intake Calculator")
+st.markdown(
+    """
+    Calculate the total amount of sugar you consume from common everyday foods.
+    Enter the quantity of each food you eat daily.
+    """
+)
+
+# Create a form to input quantities
+with st.form(key="sugar_form"):
+    quantities = {}
+    for food, sugar_per_serving in FOODS_SUGAR_CONTENT.items():
+        quantities[food] = st.number_input(
+            f"{food} (Sugar: {sugar_per_serving}g per serving)", min_value=0, step=1, format="%d"
+        )
+    submit_button = st.form_submit_button(label="Calculate Total Sugar")
+
+if submit_button:
+    total_sugar = 0
+    for food, qty in quantities.items():
+        total_sugar += qty * FOODS_SUGAR_CONTENT[food]
+    st.success(f"Your total sugar intake for the foods entered is **{total_sugar} grams** per day.")
+    st.markdown(
+        """
+        ### Recommended Limits
+        - The American Heart Association recommends no more than 25g (6 teaspoons) of added sugar per day for women.
+        - For men, the limit is 36g (9 teaspoons) of added sugar per day.
+        - Try to stay within these limits to maintain good health!
+        """
+    )
+else:
+    st.info("Enter quantities above and press 'Calculate Total Sugar' to see your sugar intake.")
+
+# Make footer
+st.markdown("---")
+st.markdown("Developed with ❤️ using Streamlit")
